@@ -18,11 +18,10 @@ package tensorflow
 
 import (
 	"fmt"
-	"runtime"
 	"unsafe"
 
+	corepb "github.com/lfch/tensorflow/tensorflow/go/core/protobuf/for_core_protos_go_proto"
 	"google.golang.org/protobuf/proto"
-	corepb "github.com/tensorflow/tensorflow/tensorflow/go/core/protobuf/for_core_protos_go_proto"
 )
 
 // #include <stdlib.h>
@@ -87,8 +86,15 @@ func LoadSavedModel(exportDir string, tags []string, options *SessionOptions) (*
 		return nil, err
 	}
 	s := &Session{c: cSess}
-	runtime.SetFinalizer(s, func(s *Session) { s.Close() })
+	// runtime.SetFinalizer(s, func(s *Session) { s.Close() })
 	return &SavedModel{Session: s, Graph: graph, Signatures: signatures}, nil
+}
+
+func (sm *SavedModel) Close() error {
+	if err := sm.Session.Close(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func generateSignatures(pb map[string]*corepb.SignatureDef) map[string]Signature {

@@ -41,7 +41,7 @@ fi
 
 cd $(dirname $0)
 for g in $(echo "${GOPATH//:/ }"); do
-    TF_DIR="${g}/src/github.com/tensorflow/tensorflow"
+    TF_DIR="${g}/src/github.com/lfch/tensorflow"
     PROTOC="${TF_DIR}/bazel-out/host/bin/external/protobuf/protoc"
     if [ -x "${PROTOC}" ]; then
         break
@@ -69,7 +69,7 @@ export PATH=$PATH:${GOPATH}/bin
 for FILE in ${TF_DIR}/tensorflow/core/framework/*.proto \
     ${TF_DIR}/tensorflow/core/protobuf/*.proto \
     ${TF_DIR}/tensorflow/compiler/xla/pjrt/distributed/*.proto \
-    ${TF_DIR}/tensorflow/compiler/xla/stream_executor/*.proto; do
+    ${TF_DIR}/tensorflow/stream_executor/*.proto; do
   ${PROTOC} \
     -I ${TF_DIR} \
     --go_out=${GOPATH}/src \
