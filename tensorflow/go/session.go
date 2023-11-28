@@ -270,6 +270,7 @@ func (s *Session) NewPartialRun(feeds, fetches []Output, targets []*Operation) (
 // Close a session. This contacts any other processes associated with this
 // session, if applicable. Blocks until all previous calls to Run have returned.
 func (s *Session) Close() error {
+	fmt.Println("Session Close start")
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.wg.Wait()
@@ -283,6 +284,7 @@ func (s *Session) Close() error {
 	}
 	C.TF_DeleteSession(s.c, status.c)
 	s.c = nil
+	fmt.Println("Session Close done")
 	return status.Err()
 }
 
