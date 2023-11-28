@@ -280,11 +280,14 @@ func (s *Session) Close() error {
 	status := newStatus()
 	C.TF_CloseSession(s.c, status.c)
 	if err := status.Err(); err != nil {
+		fmt.Printf("session close err: %v\n", err)
 		return err
 	}
-	C.TF_DeleteSession(s.c, status.c)
-	s.c = nil
 	fmt.Println("Session Close done")
+
+	C.TF_DeleteSession(s.c, status.c)
+	fmt.Println("session delete done")
+	s.c = nil
 	return status.Err()
 }
 

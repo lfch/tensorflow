@@ -209,7 +209,10 @@ func newTensorFromC(c *C.TF_Tensor) *Tensor {
 	return t
 }
 
-func (t *Tensor) finalize() { C.TF_DeleteTensor(t.c) }
+func (t *Tensor) finalize() {
+	fmt.Printf("delete tensor, tensor shape: %v\n", t.Shape())
+	C.TF_DeleteTensor(t.c)
+}
 
 // DataType returns the scalar datatype of the Tensor.
 func (t *Tensor) DataType() DataType { return DataType(C.TF_TensorType(t.c)) }

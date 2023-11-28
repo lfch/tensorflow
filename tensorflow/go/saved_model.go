@@ -51,6 +51,7 @@ type SavedModel struct {
 // See:
 // https://www.tensorflow.org/code/tensorflow/python/saved_model/
 func LoadSavedModel(exportDir string, tags []string, options *SessionOptions) (*SavedModel, error) {
+	fmt.Println("start to LoadSavedModel")
 	status := newStatus()
 	cOpt, doneOpt, err := options.c()
 	defer doneOpt()
@@ -88,6 +89,9 @@ func LoadSavedModel(exportDir string, tags []string, options *SessionOptions) (*
 	}
 	s := &Session{c: cSess}
 	runtime.SetFinalizer(s, func(s *Session) { s.Close() })
+
+	fmt.Println("done LoadSavedModel")
+
 	return &SavedModel{Session: s, Graph: graph, Signatures: signatures}, nil
 }
 

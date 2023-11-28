@@ -90,13 +90,17 @@ func (o *GraphImportOptions) AddInputMapping(src string, srcIndex int, dst Outpu
 
 // NewGraph returns a new Graph.
 func NewGraph() *Graph {
+	fmt.Println("new graph start")
 	g := &Graph{C.TF_NewGraph()}
 	runtime.SetFinalizer(g, (*Graph).finalizer)
+	fmt.Println("new graph done")
 	return g
 }
 
 func (g *Graph) finalizer() {
+	fmt.Println("delete graph start")
 	C.TF_DeleteGraph(g.c)
+	fmt.Println("delete graph done")
 }
 
 // WriteTo writes out a serialized representation of g to w.
