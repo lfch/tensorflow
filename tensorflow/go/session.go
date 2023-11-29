@@ -62,6 +62,9 @@ func NewSession(graph *Graph, options *SessionOptions) (*Session, error) {
 	}
 
 	s := &Session{c: cSess}
+
+	fmt.Printf("new Session: %p\n", s)
+
 	runtime.SetFinalizer(s, func(s *Session) { s.Close() })
 	return s, nil
 }
@@ -270,7 +273,7 @@ func (s *Session) NewPartialRun(feeds, fetches []Output, targets []*Operation) (
 // Close a session. This contacts any other processes associated with this
 // session, if applicable. Blocks until all previous calls to Run have returned.
 func (s *Session) Close() error {
-	fmt.Println("Session Close start")
+	fmt.Printf("Session Close start: %p\n", s)
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.wg.Wait()
@@ -283,10 +286,10 @@ func (s *Session) Close() error {
 		fmt.Printf("session close err: %v\n", err)
 		return err
 	}
-	fmt.Println("Session Close done")
+	fmt.Printf("Session Close done: %p\n", s)
 
 	C.TF_DeleteSession(s.c, status.c)
-	fmt.Println("session delete done")
+	fmt.Printf("session delete done: %p\n", s)
 	s.c = nil
 	return status.Err()
 }

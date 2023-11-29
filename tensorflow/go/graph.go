@@ -93,14 +93,14 @@ func NewGraph() *Graph {
 	fmt.Println("new graph start")
 	g := &Graph{C.TF_NewGraph()}
 	runtime.SetFinalizer(g, (*Graph).finalizer)
-	fmt.Println("new graph done")
+	fmt.Printf("new graph done: %p\n", g)
 	return g
 }
 
 func (g *Graph) finalizer() {
-	fmt.Println("delete graph start")
+	fmt.Printf("delete graph start: %p\n", g)
 	C.TF_DeleteGraph(g.c)
-	fmt.Println("delete graph done")
+	fmt.Printf("delete graph done: %p\n", g)
 }
 
 // WriteTo writes out a serialized representation of g to w.
