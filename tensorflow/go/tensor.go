@@ -35,6 +35,7 @@ import (
 	"math/bits"
 	"reflect"
 	"runtime"
+	"time"
 	"unsafe"
 )
 
@@ -210,7 +211,7 @@ func newTensorFromC(c *C.TF_Tensor) *Tensor {
 }
 
 func (t *Tensor) finalize() {
-	fmt.Printf("delete tensor, tensor shape: %v\n", t.Shape())
+	fmt.Printf("%v delete tensor, tensor shape: %v\n", time.Now(), t.Shape())
 	C.TF_DeleteTensor(t.c)
 }
 

@@ -45,6 +45,7 @@ import (
 	"fmt"
 	"io"
 	"runtime"
+	"time"
 	"unsafe"
 )
 
@@ -93,14 +94,13 @@ func NewGraph() *Graph {
 	fmt.Println("new graph start")
 	g := &Graph{C.TF_NewGraph()}
 	runtime.SetFinalizer(g, (*Graph).finalizer)
-	fmt.Printf("new graph done: %p\n", g)
+	fmt.Printf("%v new graph done: %p\n", time.Now(), g)
 	return g
 }
 
 func (g *Graph) finalizer() {
-	fmt.Printf("delete graph start: %p\n", g)
 	C.TF_DeleteGraph(g.c)
-	fmt.Printf("delete graph done: %p\n", g)
+	fmt.Printf("%v delete graph done: %p\n", time.Now(), g)
 }
 
 // WriteTo writes out a serialized representation of g to w.
