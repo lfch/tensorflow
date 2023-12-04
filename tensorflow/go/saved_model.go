@@ -21,7 +21,6 @@ import (
 	"runtime"
 	"unsafe"
 
-	"google.golang.org/protobuf/proto"
 	corepb "github.com/lfch/tensorflow/tensorflow/go/core/protobuf/for_core_protos_go_proto"
 )
 
@@ -75,20 +74,20 @@ func LoadSavedModel(exportDir string, tags []string, options *SessionOptions) (*
 	}
 	C.free(unsafe.Pointer(cExportDir))
 
-	metaGraphDefBytes := C.GoBytes(metaGraphDefBuf.data, C.int(metaGraphDefBuf.length))
+	/*metaGraphDefBytes := C.GoBytes(metaGraphDefBuf.data, C.int(metaGraphDefBuf.length))
 	metaGraphDef := new(corepb.MetaGraphDef)
 	if err := proto.Unmarshal(metaGraphDefBytes, metaGraphDef); err != nil {
 		return nil, err
 	}
 
-	signatures := generateSignatures(metaGraphDef.GetSignatureDef())
+	signatures := generateSignatures(metaGraphDef.GetSignatureDef())*/
 
 	if err := status.Err(); err != nil {
 		return nil, err
 	}
 	s := &Session{c: cSess}
 	runtime.SetFinalizer(s, func(s *Session) { s.Close() })
-	return &SavedModel{Session: s, Graph: graph, Signatures: signatures}, nil
+	return &SavedModel{Session: s, Graph: graph, Signatures: nil}, nil
 }
 
 func generateSignatures(pb map[string]*corepb.SignatureDef) map[string]Signature {
